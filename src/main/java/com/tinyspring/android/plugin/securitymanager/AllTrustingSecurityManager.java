@@ -1,4 +1,4 @@
-package com.tinyspring.android.plugin;
+package com.tinyspring.android.plugin.securitymanager;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
