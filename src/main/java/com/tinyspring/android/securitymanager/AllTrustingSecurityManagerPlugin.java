@@ -1,4 +1,4 @@
-package com.tinyspring.android.plugin.securitymanager;
+package com.tinyspring.android.securitymanager;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -11,8 +11,8 @@ import javax.net.ssl.X509TrustManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.h2.tinyspring.android.Application;
-import com.h2.tinyspring.android.plugin.APlugin;
+import com.tinyspring.android.Application;
+import com.tinyspring.android.plugin.APlugin;
 
 /**
  * This class installs all trusting security manager for TLS (https)
@@ -29,9 +29,9 @@ import com.h2.tinyspring.android.plugin.APlugin;
  * @author tomas.adamek
  * 
  */
-public class AllTrustingSecurityManager extends APlugin {
+public class AllTrustingSecurityManagerPlugin extends APlugin {
 
-    private static final Logger log = LoggerFactory.getLogger(AllTrustingSecurityManager.class);
+    private static final Logger log = LoggerFactory.getLogger(AllTrustingSecurityManagerPlugin.class);
 
     @Override
     public void onApplicationCreate(Application application) {
