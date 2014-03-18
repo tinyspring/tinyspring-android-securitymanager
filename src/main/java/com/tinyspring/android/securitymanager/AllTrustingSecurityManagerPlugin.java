@@ -12,10 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tinyspring.android.Application;
-import com.tinyspring.android.plugin.APlugin;
+import com.tinyspring.android.plugin.IApplicationPlugin;
 
 /**
- * This class installs all trusting security manager for TLS (https)
+ * This class installs all trusti1ng security manager for TLS (https)
  * connections.
  * 
  * If a web site uses self-generate certificate or an authority which are not
@@ -29,37 +29,35 @@ import com.tinyspring.android.plugin.APlugin;
  * @author tomas.adamek
  * 
  */
-public class AllTrustingSecurityManagerPlugin extends APlugin {
+public class AllTrustingSecurityManagerPlugin implements IApplicationPlugin {
 
-    private static final Logger log = LoggerFactory.getLogger(AllTrustingSecurityManagerPlugin.class);
+	private static final Logger log = LoggerFactory.getLogger(AllTrustingSecurityManagerPlugin.class);
 
-    @Override
-    public void onApplicationCreate(Application application) {
-        super.onApplicationCreate(application);
+	@Override
+	public void onApplicationCreate(Application application) {
+		this.installAllTrustingSecurityManager();
+	}
 
-        this.installAllTrustingSecurityManager();
-    }
+	private void installAllTrustingSecurityManager() {
+		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+				return new java.security.cert.X509Certificate[] {};
+			}
 
-    private void installAllTrustingSecurityManager() {
-        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                return new java.security.cert.X509Certificate[] {};
-            }
+			public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+			}
 
-            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
+			public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+			}
+		} };
 
-            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-        } };
-
-        // Install the all-trusting trust manager
-        try {
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, trustAllCerts, new java.security.SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        } catch (Exception e) {
-            log.error("Problem when installing an All Trusting Security Manager plugin for Tinyspring", e);
-        }
-    }
+		// Install the all-trusting trust manager
+		try {
+			SSLContext sc = SSLContext.getInstance("TLS");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+		} catch (Exception e) {
+			log.error("Problem when installing an All Trusting Security Manager plugin for Tinyspring", e);
+		}
+	}
 }
